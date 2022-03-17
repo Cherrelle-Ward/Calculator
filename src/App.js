@@ -1,25 +1,47 @@
-import logo from './logo.svg';
 import './App.css';
+import Display from "./components/Display"
+import Operators from './components/Operators';
+import Numbers from './components/Numbers';
+import { useState } from "react" 
+import { evaluate } from "mathjs"
 
-function App() {
-  return (
+const App = () => {
+  const [input, setInput] = useState("")
+
+  const calculate = (button) =>{
+    if(button === "="){
+      const result = evaluate(input)
+      setInput(result)
+    } else if (button === "c"){
+      setInput("0")
+    } else {
+      setZero(button)
+    }
+  }
+
+  // BUTTON
+  const handleClick = (event) =>{
+    const display = event.target.innerText
+    calculate(display);
+  }
+
+  const setZero = (value)=>{
+      if(input === "0") {
+        setInput(value)
+        return 
+      }
+      setInput(input + value)
+  };
+
+
+  return ( 
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>My Calculator</h1>
+      <Display input={input} />
+      <Operators handleClick={handleClick} />
+      <Numbers handleClick={handleClick} />
     </div>
-  );
+   );
 }
-
-export default App;
+ 
+export default App ;
